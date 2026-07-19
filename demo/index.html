@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Midnight Statement Demo</title>
+    <link rel="stylesheet" href="/src/demo.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">MIDNIGHT · HACKATHON DEMO</p>
+        <h1>Private statement proof</h1>
+        <p class="lede">The bank issues a commitment. The holder unlocks the statement only by providing matching private values.</p>
+      </header>
+
+      <p id="status" class="status">Ready — issue a statement on Midnight.</p>
+
+      <section id="bank">
+        <h2>Issue a statement</h2>
+        <form id="bank-form">
+          <label>Statement<textarea name="statement" required>First National Bank
+Account holder: Jane Doe
+Statement period: Jan 1 - Jun 30, 2026
+Closing balance: $4,250.00 USD
+
+Jan 15 - Whole Foods Market - $87.32 - Groceries
+Jan 28 - Metro Transit - $45.00 - Transportation
+Feb 3 - Netflix - $15.99 - Subscriptions
+Feb 14 - City Electric Utility - $126.48 - Utilities
+Mar 1 - Employer Payroll - +$3,200.00 - Income
+Mar 9 - Olive Garden - $64.75 - Dining
+Mar 22 - Spotify Premium - $11.99 - Subscriptions
+Apr 5 - Shell Gas Station - $58.41 - Transportation
+Apr 18 - Amazon Marketplace - $132.67 - Shopping
+May 1 - Employer Payroll - +$3,200.00 - Income
+May 12 - Planet Fitness - $24.99 - Subscriptions
+Jun 7 - Walgreens Pharmacy - $39.84 - Health
+Jun 21 - Delta Airlines - $418.60 - Travel
+Jun 28 - Apple iCloud+ - $2.99 - Subscriptions</textarea></label>
+          <label>Identity key<input name="identityKey" required value="holder-demo-key" /></label>
+          <label>Bank key<input name="bankKey" required value="bank-demo-key" /></label>
+          <label>Nonce<input name="nonce" required value="random-nonce-123" /></label>
+          <button type="submit">Issue commitment</button>
+          <button id="send-statement" type="button" disabled>Send locked statement PDF</button>
+          <p id="send-status" class="send-status" hidden></p>
+        </form>
+      </section>
+
+      <p class="note">Hackathon mode: the bank issue flow uses the local Midnight devnet gateway. The email contains a private verification link; production should use the holder’s own wallet instead of this local demo gateway.</p>
+    </main>
+    <script type="module" src="/src/demo.ts"></script>
+  </body>
+</html>

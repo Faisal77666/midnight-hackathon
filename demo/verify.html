@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verify Statement · First National Bank</title>
+    <link rel="stylesheet" href="/src/demo.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">FIRST NATIONAL BANK · MIDNIGHT VERIFICATION</p>
+        <h1>Unlock your statement</h1>
+        <p class="lede">The private witness package is carried in this secure link fragment. Its contents are decrypted locally and used as private Midnight witnesses.</p>
+      </header>
+
+      <p id="status" class="status">Authenticate to decrypt your private witness package and prove ownership.</p>
+
+      <form id="verify-form">
+        <label>Identity key<input name="identityKey" required /></label>
+        <button type="submit">Prove ownership with Midnight</button>
+      </form>
+
+      <article id="unlocked" hidden>
+        <p class="eyebrow">MIDNIGHT PROOF VERIFIED</p>
+        <p id="statement-content"></p>
+        <section id="ai-panel" aria-label="Private statement assistant">
+          <p class="eyebrow">PRIVATE AI ASSISTANT</p>
+          <form id="ai-form">
+            <label>Ask about this statement<input name="question" required placeholder="Summarize my spending" /></label>
+            <button type="submit">Ask AI</button>
+          </form>
+          <p id="ai-answer" class="ai-answer" hidden></p>
+        </section>
+        <section class="unlocked-pdf">
+          <p class="eyebrow">VERIFIED PDF</p>
+          <iframe id="unlocked-pdf-frame" title="Unlocked First National Bank statement PDF"></iframe>
+          <button id="send-unlocked-statement" type="button">Email unlocked statement PDF</button>
+          <p id="send-unlocked-status" class="send-status" hidden></p>
+        </section>
+      </article>
+    </main>
+    <script type="module" src="/src/verify.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+pragma language_version 0.23;
+
+import CompactStandardLibrary;
+
+export sealed ledger bankAuthorization: Bytes<32>;
+export ledger statementCommitment: Bytes<32>;
+export ledger holderIdentityCommitment: Bytes<32>;
+export ledger issued: Boolean;
+export ledger ownershipProved: Boolean;
+
+witness localBankKey(): Bytes<32>;
+witness localStatement(): Bytes<32>;
+witness localIdentityKey(): Bytes<32>;
+witness localNonce(): Bytes<32>;
+
+constructor() {
+  bankAuthorization = bankKeyCommitment(localBankKey());
+  issued = false;
+  ownershipProved = false;
+}
+
+circuit bankKeyCommitment(bankKey: Bytes<32>): Bytes<32> {
+  return disclose(
+    persistentHash<Vector<2, Bytes<32>>>(
+      [pad(32, "bank:statement:authority:v1"), bankKey]
+    )
+  );
+}
+
+circuit statementCommitmentFor(
+  statement: Bytes<32>,
+  identityKey: Bytes<32>,
+  nonce: Bytes<32>
+): Bytes<32> {
+  return disclose(
+    persistentHash<Vector<4, Bytes<32>>>(
+      [pad(32, "bank:statement:v1"), statement, identityKey, nonce]
+    )
+  );
+}
+
+circuit identityCommitmentFor(identityKey: Bytes<32>): Bytes<32> {
+  return disclose(
+    persistentHash<Vector<2, Bytes<32>>>(
+      [pad(32, "bank:holder:v1"), identityKey]
+    )
+  );
+}
+
+export circuit issueStatement(
+  statement: Bytes<32>,
+  identityKey: Bytes<32>,
+  nonce: Bytes<32>
+): [] {
+  assert(!issued, "Statement already issued");
+  assert(
+    bankAuthorization == bankKeyCommitment(localBankKey()),
+    "Only the bank can issue a statement"
+  );
+  statementCommitment = statementCommitmentFor(statement, identityKey, nonce);
+  holderIdentityCommitment = identityCommitmentFor(identityKey);
+  issued = true;
+}
+
+export circuit proveStatementOwnership(): [] {
+  assert(issued, "No statement has been issued");
+  assert(!ownershipProved, "Proof has already been recorded");
+
+  const statement = localStatement();
+  const identityKey = localIdentityKey();
+  const nonce = localNonce();
+
+  assert(
+    holderIdentityCommitment == identityCommitmentFor(identityKey),
+    "Identity key is not the key bound to this statement"
+  );
+  assert(
+    statementCommitment ==
+      statementCommitmentFor(statement, identityKey, nonce),
+    "Statement does not match the issued commitment"
+  );
+  ownershipProved = true;
+}
