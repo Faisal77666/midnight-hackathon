@@ -18,7 +18,8 @@ services:
 
   indexer:
     image: 'midnightntwrk/indexer-standalone:4.3.3'
-    restart: on-failure:10
+    restart: on-failure:20
+    entrypoint: ['/bin/sh', '-c', 'sleep 20 && exec entrypoint.sh']
     ports:
       - '127.0.0.1:8088:8088'
     environment:
@@ -35,8 +36,8 @@ services:
       test: ['CMD-SHELL', 'cat /var/run/indexer-standalone/running']
       interval: 10s
       timeout: 5s
-      retries: 20
-      start_period: 10s
+      retries: 30
+      start_period: 30s
     depends_on:
       node:
         condition: service_healthy
